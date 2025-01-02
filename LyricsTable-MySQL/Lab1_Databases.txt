@@ -1,0 +1,66 @@
+Name: Esmeralda Amado
+
+Q1: List all of the rows and columns in the Members table of the Lyric database. (Members table)
+
+1. SELECT *
+   FROM Members;
+
+
+Q2: List all of the genres in the Lyric database. (Genre table)
+
+2. SELECT Genre
+   FROM Titles;
+
+
+Q3: List the Title, UPC and Genre of all album titles. (Titles table)
+
+3. SELECT Title, UPC, Genre
+   FROM Titles;
+
+
+Q4: List all of the rows of album titles produced by the artist whose ArtistID is 2. (Titles table)
+
+4. SELECT Title
+   FROM Titles
+   WHERE ArtitstID ='2';
+
+
+Q5: List the First Name, Last Name, HomePhone and Email address of all members. (Members table)
+
+5. SELECT FirstName, LastName, HomePhone, EMail
+   FROM Members;
+
+
+Q6: List the Member ID of all male members. (Members table)
+
+6. SELECT MemberID
+   FROM Members
+   WHERE Gender ='M';
+
+
+Q7: List the StudioName, WebAddress, Email, and Phone of the studio located in the city of "Santa Theresa". (Studios table)
+
+7. SELECT StudioName, WebAddress, EMail, Phone
+   FROM Studios
+   WHERE City ='Santa Theresa';
+
+
+Q8: List all of the information about the salesperson that has a base salary greater than 200. (Salespeople table)
+
+8. SELECT *
+   FROM Salespeople
+   WHERE Base > 200;
+
+
+Q9: List the Member ID and Country of all members in "Canada". (Members table)
+
+9. SELECT MemberID, Country
+   FROM Members
+   WHERE Country ='Canada';
+
+
+Q10: List the first name, last name, and region of all members from Virginia who either have a work phone or an email address. (Members Table)
+
+10. SELECT FirstName, LastName, Region
+    FROM Members
+    WHERE (WorkPhone IS NOT NULL or EMail IS NOT NULL) and Region ='VA'; 

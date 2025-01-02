@@ -1,0 +1,112 @@
+Name: Esmeralda Amado
+
+SECTION 1 (sub-queries)
+
+Q1:  List the length of the longest track in the 'metal' genre.
+
+Q1: SELECT MAX(LengthSeconds)
+    FROM Tracks
+    WHERE TitleID IN (SELECT TitleID FROM Titles WHERE Genre = 'metal');
+
+
+Q2:  List the artistid, artistname and entrydate of all artists whose entrydate is earlier than everyone who has a 'directmail' leadsource.
+
+Q2: SELECT ArtistID, ArtistName, EntryDate
+    FROM Artists
+    WHERE EntryDate < ALL (SELECT EntryDate FROM Artists WHERE LeadSource ='directmail');
+
+
+Q3:  List the artistid, artistname and entrydate of all artists whose entrydate is earlier than anyone who has a 'directmail' leadsource.
+
+Q3: SELECT ArtistID, ArtistName, EntryDate
+    FROM Artists
+    WHERE EntryDate < ANY (SELECT EntryDate FROM Artists WHERE LeadSource ='directmail');
+
+
+Q4:  List the artistname and entrydate of the artist with the earliest entry date.
+
+Q4: SELECT ArtistName, EntryDate
+    FROM Artists
+    WHERE EntryDate = (SELECT MIN(EntryDate) FROM Artists);
+
+
+Q5:  List the track titles of all titles in the 'alternative' genre. 
+
+Q5: SELECT TrackTitle
+    FROM Tracks
+    WHERE TitleID IN (SELECT TitleID FROM Titles WHERE Genre = 'alternative');
+
+
+Q6:  List all genres from the Genre table that are not represented in the Titles table. 
+
+Q6: SELECT Genre
+    FROM Genre
+    WHERE Genre NOT IN (SELECT Genre FROM Titles);
+
+
+Q7*: List track titles and lengths of tracks with a length longer than all tracks of the 'metal' genre. (Hint: This requires sub-query within a sub-query)
+
+Q7: SELECT TrackTitle, LengthSeconds
+    FROM Tracks
+    WHERE LengthSeconds > (SELECT MAX(LengthSeconds)FROM Track WHERE TitleID IN (SELECT TitleID FROM Titles WHERE Genre = 'metal'));
+
+
+Q8:  List the track title with longest length in seconds.
+
+Q8:SELECT TrackTitle, LengthSeconds
+   FROM Tracks
+   WHERE LengthSeconds = (SELECT MAX(LengthSeconds) FROM Tracks);
+
+
+SECTION 2 (Equi-join or Inner Join)
+
+Q9:  List the album title and the title of all tracks recorded in StudioID 1
+
+Q9: SELECT titles.Title, tracks.TrackTitle
+    FROM titles
+    INNER JOIN tracks ON titles.TitleID = tracks.TitleID
+    WHERE titles.StudioID = 1;
+
+
+Q10:  List each title from the Title table along with the name of the studio where it was recorded.
+
+Q10: SELECT titles.Title, studios.StudioName
+     FROM titles
+     INNER JOIN studios ON titles.StudioID = studios.StudioID;
+
+
+Q11:  Find the name of the sales person who works with the member with last name 'Alvarez'
+
+Q11: SELECT salespeople.FirstName, salespeople.LastName
+     FROM salespeople
+     INNER JOIN members ON salespeople.SalesID = members.SalesID
+     WHERE members.LastName = 'Alvarez';
+
+
+Q12:  List the names of all member(s) from California and the names of the salespeople that they work with.
+
+Q12: SELECT Members.FirstName AS 'First Name of Member', 
+            Members.LastName AS 'Last Name of Member', 
+            Salespeople.FirstName AS 'First Name of Sales Person', 
+            Salespeople.LastName AS 'Last Name of Sales Person'
+     FROM Members
+     INNER JOIN Salespeople ON Members.SalesID = Salespeople.SalesID
+     WHERE Members.Region = 'CA';
+
+
+Q13:  List the names of all artists who have recorded more than one title and the number of titles they have recorded. 
+
+Q13: SELECT Artists.ArtistName, COUNT(Titles.TitleID) AS 'Number of Titles'
+     FROM Artists
+     INNER JOIN Titles ON Artists.ArtistID = Titles.ArtistID
+     GROUP BY Artists.ArtistID, Artists.ArtistName
+     HAVING COUNT(Titles.TitleID) > 1;
+
+
+Q14:  Report the name of the title and number of tracks for any title with fewer than 9 tracks.
+
+Q14: SELECT Titles.Title AS 'Title Name', COUNT(Tracks.TrackNum) AS 'Number of Tracks'
+     FROM Titles
+     INNER JOIN Tracks ON Titles.TitleID = Tracks.TitleID
+     GROUP BY Titles.Title
+     HAVING COUNT(Tracks.TrackNum) < 9;

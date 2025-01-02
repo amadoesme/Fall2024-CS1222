@@ -1,0 +1,70 @@
+Name: Esmeralda Amado
+
+UNIONS
+
+1. SELECT StudioName AS "Name", WebAddress
+   FROM Studios
+   WHERE WebAddress IS NOT NULL
+   UNION
+   SELECT ArtistName AS "Name", WebAddress
+   FROM Artists
+   WHERE WebAddress IS NOT NULL;
+
+
+2. SELECT Gender, COUNT(*) AS "Number"
+   FROM Members
+   WHERE Gender IN ('F', 'M')
+   GROUP BY Gender
+   UNION
+   SELECT 'Total' AS "Gender", COUNT(*) AS "Number"
+   FROM Members;
+
+
+DATA MANIPULATION
+
+3. INSERT INTO Artists (ArtistID, ArtistName, City, Region, Country, WebAddress, EntryDate, LeadSource)
+   VALUES (12, 'November', 'New Orleans', 'LA', 'USA', 'www.november.com', CURDATE(), 'Directmail');
+
+
+4. INSERT INTO tracks (TitleID, TrackNum, TrackTitle, LengthSeconds, MP3)
+   SELECT TitleID, 11, 'Spring', 150, 1
+   FROM titles
+   WHERE TitleID = 4;
+
+
+5. UPDATE Artists
+   SET WebAddress = CONCAT('www.lyricmusic.com/', ArtistID)
+   WHERE WebAddress IS NULL;
+
+
+6. INSERT INTO Members2 (MemberID, FirstName, LastName, Address, City, Region, PostalCode, Country, HomePhone, WorkPhone, EMail, Gender, Birthday, SalesID)
+   SELECT MemberID, FirstName, LastName, Address, City, Region, PostalCode, Country, HomePhone, WorkPhone, EMail, Gender, Birthday, SalesID
+   FROM Members;
+
+
+7. UPDATE Members2
+   SET HomePhone = REPLACE(HomePhone, '277', '899'), WorkPhone = REPLACE(WorkPhone, '277', '899')
+   WHERE City = 'Columbus' AND Region = 'OH';
+
+
+8. DELETE FROM Members2
+   WHERE MemberID IN (SELECT MemberID FROM XrefArtistsMembers WHERE ArtistID = (SELECT ArtistID FROM Artists WHERE ArtistName = 'Sonata'));
+
+
+EXTRA CREDIT
+
+9. INSERT INTO Artists (ArtistID, ArtistName, City, Region, Country, EntryDate)
+   SELECT 13, 'Doug and Terry', City, Region, Country, CURDATE()
+   FROM Members
+   WHERE FirstName = 'Doug' AND LastName = 'Finney';
+
+
+10. INSERT INTO XrefArtistsMembers (ArtistID, MemberID, RespParty)
+    SELECT 13, MemberID, 1
+    FROM Members
+    WHERE FirstName = 'Doug' AND LastName = 'Finney'
+    UNION ALL
+    SELECT 13, MemberID, 0
+    FROM Members
+    WHERE FirstName = 'Terry' AND LastName = 'Irving';
+

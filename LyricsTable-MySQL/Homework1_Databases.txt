@@ -1,0 +1,75 @@
+Name: Esmeralda Amado
+
+PART 1
+
+Q1: List the first name, last name, home phone, and gender of all members from Georgia who either have a home phone in area code 822 or are female.
+
+Q1: SELECT FirstName, LastName, HomePhone, Gender
+    FROM Members
+    WHERE (HomePhone LIKE '822%' OR Gender = 'F') AND Region='GA';
+
+
+Q2: List all the information of tracks that do not have an MP3.
+
+Q2: Select *
+    FROM Tracks
+    WHERE MP3='0' OR MP3 IS NULL;
+
+
+Q3: List the TitleID, Title, and UPC of any titles whose UPC end with '2'
+
+Q3: SELECT TitleID, Title, UPC
+    FROM Titles 
+    WHERE UPC LIKE '%2';
+
+
+Q4: List the artist name and web address of any artists who has a web address. Rename the columns from artistname, webaddress as "Artist Name", and "Web Address".
+
+Q4: SELECT ArtistName AS 'Artist Name', WebAddress AS 'Web Address'
+    FROM Artists
+    WHERE WebAddress IS NOT NULL;
+
+
+Q5:  List the TitleID, TrackNum, and TrackTitle of all tracks whose name starts with "Song" at the beginning of the tracktitle.
+
+Q5: SELECT TitleID, TrackNum, TrackTitle
+    FROM Tracks
+    WHERE TrackTitle LIKE 'Song%';
+
+PART 2
+
+Q6:  Report the average, shortest, and longest track lengths in minutes of all tracks.
+
+Q6: SELECT AVG(LengthSeconds) / 60 AS 'Average Length In Minutes',
+    MIN(LengthSeconds) / 60 AS 'Shortest Length In Minutes',
+    MAX(LengthSeconds) / 60 AS 'Longest Length in Minutes'
+    FROM Tracks;
+
+
+Q7:  Report the number of male members who are in US.
+
+Q7: SELECT COUNT(*)
+    FROM Members
+    WHERE Gender='M' AND Country='USA';
+
+
+Q8: Report the number of tracks for each TitleID
+
+Q8: SELECT TitleID, COUNT(*)
+    FROM Tracks
+    GROUP BY TitleID;
+
+
+Q9:  Report the total time in minutes for each titleid
+
+Q9: SELECT TitleID, SUM(LengthSeconds) / 60 AS 'Total Time in Minutes'
+    FROM Tracks
+    GROUP BY TitleID;
+
+
+Q10:  Report the number of members for each combination of region and gender. Sort the results by the region. DON'T FORGET TO SORT THE RESULTS
+
+Q10: SELECT Region, Gender, COUNT(*)
+     FROM Members
+     GROUP BY Region, Gender
+     ORDER BY Region, Gender;
