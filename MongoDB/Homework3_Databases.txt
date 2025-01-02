@@ -1,0 +1,54 @@
+Name: Esmeralda Amado
+Comments: I'm not sure if this is the correct formatting for the queries
+
+1. db.restaurants.find(
+			{ borough: "Queens" }
+		      )
+
+
+2. db.restaurants.find(
+                        { restaurant_id: "40377124" }
+                       )
+
+
+3. db.restaurants.find(
+			{ cuisine: "Italian" }
+		      )
+
+
+4. db.restaurants.find(
+  			{ "address.building": "703" },
+ 			{ name: 1, address: 1, _id: 0 }
+                       )
+
+
+5. db.restaurants.find(
+  			{ "address.street": "Spring Street", "address.building": "300" },
+  			{ name: 1, address: 1, _id: 0 }
+                       )
+
+6. db.restaurants.find(
+  			{ cuisine: 
+					{ $in: 
+						["American", "French"] 
+                                        } 
+			},
+ 			 { name: 1, cuisine: 1, _id: 0 }
+		      )
+
+
+7. db.restaurants.find(
+  			{ "grades.score": 
+						{ $gt: 100 } 
+			},
+  			{ name: 1, "grades.score": 1, _id: 0 }
+                        )
+
+
+8. db.restaurants.find(
+  			{ "address.zipcode": "10065" },
+  			{ borough: 0, cuisine: 0, grades: 0 }
+                      )
+
+
+
