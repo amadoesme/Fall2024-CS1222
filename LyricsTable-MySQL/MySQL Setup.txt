@@ -1,0 +1,20 @@
+Setting up your database:
+First you will need to run MySQL in either a terminal (for Mac users), or command line (for Windows users).
+
+mysql -u root -p
+After this you will need to create your first database, lets call this new one "lyrics":
+
+create database lyrics;
+After this, you will need to select the newly created database:
+
+use lyrics;
+After this you will need to download the following file: Lyric.sqlLinks to an external site.. This file is a script to create the Lyric database that we will be using for the majority of this class.
+
+To run this script, you can either open it up in a text editor and copy paste everything into your terminal/command prompt/workbench, or you can run the following code:
+
+source PATH/TO/FILE/Lyric.sql
+This will create all of the tables and records for the Lyric database. Save this Lyric.sql file just in case if you need to recreate the database for whatever reason.
+
+An alternative to this is to open the Lyric.sql file in a text editor like notepad or notepad++, then copy the FULL contents of the Lyric.sql file, and paste it into your terminal/command prompt/Mysql
+
+workbench. This will also install the database information in your newly created database.
