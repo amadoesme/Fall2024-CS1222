@@ -1,0 +1,40 @@
+Name: Esmeralda Amado
+
+Aggregation
+
+1. SELECT COUNT(*) AS "Number", MIN(price) AS "Min Price", MAX(price) AS "Max Price", AVG(sales) AS "Average Sale"
+   FROM Titles
+   WHERE type = 'history';
+
+
+2. SELECT COUNT(*) AS "Number of Books", AVG(pages) AS "Average Pages"
+   FROM Titles
+   JOIN Publishers ON Titles.pub_id = Publishers.pub_id 
+   WHERE Publishers.pub_id = 'P01';
+
+
+3. SELECT type, COUNT(*) AS "Number of Books", AVG(price) AS "Average Price"
+   FROM Titles
+   GROUP BY type
+   ORDER BY COUNT(*) ASC;
+
+Functions
+
+4. SELECT pub_name
+   FROM Publishers
+   JOIN Titles ON Publishers.pub_id = Titles.pub_id
+   WHERE LENGTH(Titles.title_name) = (SELECT MIN(LENGTH(title_name)) FROM Titles);
+
+
+5. SELECT au_id, LEFT(phone, 3) AS "Area Code", RIGHT(phone, 8) AS "Phone Number"
+   FROM Authors;
+
+
+6. SELECT CONCAT(SUBSTRING(au_fname, 1, 1), '. ', au_lname) AS "Formatted Name"
+   FROM Authors
+   WHERE au_fname IS NOT NULL AND au_fname != '' AND au_lname IS NOT NULL AND au_lname != ''
+   ORDER BY au_lname, au_fname;
+
+
+
+
