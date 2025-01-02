@@ -1,0 +1,151 @@
+Name: Esmeralda Amado
+
+Part 1: Short answers
+
+Q1. What is a primary key used for? Can you give me an example of a primary key in the Lyrics
+database?
+ANSWER: It's a column that uniquely identifies a table row. An example is MemberID.
+
+Q2. What is the difference between a primary key and a foreign key?
+ANSWER: A primary key is a column that uniquely defines a row in a table. The foreign key is a column or set of columns in a table that creates a relationship between two tables by referencing the primary key of another table.
+
+Q3. List a pair of tables that have a one-to-many relationship in the Lyric database. Which one is
+the “one” table, and which one is the “many” table?
+ANSWER: The "one" table is Artists, as each artist can have many albums associated with them. The "many" table is Albums, where each album is associated with one artist but an artist can release multiple albums.
+
+Q4. What is the difference between the HAVING and the WHERE clauses?
+ANSWER: The HAVING clause is used after aggregation, especially after GROUP BY has been used. The WHERE clause is used before any grouping or aggregation.
+
+Q5. What is the GROUP BY clause used for in MySQL?
+ANSWER: The GROUP BY clause groups rows into summary rows based on column values or expressions, allowing aggregate functions like COUNT, SUM, or AVG to be applied to each group.
+
+Part 2: I will give you SQL queries and you must describe what they do. Do not just repeat the
+question, try to answer what the queries do in as simple of terms as possible.
+
+Q6. select title
+from titles
+where not (Genre = 'Jazz');
+ANSWER: It shows all the song or album titles that belong to any genre except Jazz
+
+Q7. select lastname, firstname, region, birthday
+from Members
+where birthday in (select birthday
+from Members
+where month(birthday) = 7);
+ANSWER: It shows the last names, first names, regions, and birthdays of members born in July.
+
+Q8. select Sales.Firstname As EmpFirst, Sales.Lastname as EmpLast,
+Sup.Firstname as SupFirst, Sup.Lastname as SupLast
+from Salespeople Sales inner join Salespeople Sup
+On Sales.Supervisor=Sup.SalesID;
+ANSWER: It shows the first and last names of each salesperson and the first and last names of their supervisors.
+
+Q9. select titleid, sum(lengthseconds)
+From Tracks
+Group by titleid;
+ANSWER: It adds up the total time for each song title. 
+
+Part 3: Use the Lyrics database to create a single query that satisfies the question.
+
+Q9. List the names of members in the artist group called 'Today'.
+SELECT FirstName, LastName
+FROM Members
+WHERE MemberID IN (
+    SELECT MemberID
+    FROM XrefArtistsMembers
+    WHERE ArtistID IN (
+        SELECT ArtistID
+        FROM Artists
+        WHERE ArtistName = 'Today'));
+
+Q10. Report the total runtime in minutes FOR EACH album in the Titles table.
+SELECT TitleID, SUM(LengthSeconds) / 60 AS Minutes
+FROM Tracks
+GROUP BY TitleID;
+
+Q11. List the firstname and lastname of members who are represented by the salesperson “Lisa Williams”
+SELECT M.FirstName, M.LastName
+FROM Members M
+JOIN Salespeople S ON M.SalesID = S.SalesID
+WHERE S.FirstName = 'Lisa' AND S.LastName = 'Williams';
+
+
+Q12. Report all of the genres from the Genre table. Capitalize the first letter of each genre and
+the rest of the letters should be lowercase. For example “alternative” should be capitalized to
+“Alternative”.
+SELECT CONCAT(UPPER(SUBSTRING(Genre, 1, 1)), LOWER(SUBSTRING(Genre, 2))) AS CapitalizedGenre
+FROM Genre;
+
+
+Q13. Use Union statements to show the following: list the number of artists that have a webaddress, the number of artists that do not have a webaddress, and the total number of
+artists. The output should look like:
++--------------------------+----------+
+| Has webaddress | count(*) |
++--------------------------+----------+
+| Has webaddress | 5 |
+| Does not have webaddress | 6 |
+| Total | 11 |
++--------------------------+----------+
+
+SELECT 'Has webaddress' AS `Has webaddress`, COUNT(*) AS `count(*)`
+FROM Artists 
+WHERE WebAddress IS NOT NULL
+UNION 
+SELECT 'Does not have webaddress' AS `Has webaddress`, COUNT(*) AS `count(*)`
+FROM Artists 
+WHERE WebAddress IS NULL
+UNION 
+SELECT 'Total' AS `Has webaddress`, COUNT(*) AS `count(*)`
+FROM Artists;
+
+
+Q14. A new salesperson has been hired. Their SalesID is 5, full name is “John Jacob Smith”, they
+are paid 300 as a base pay, and their supervisor is “Scott Bull”. Insert John Smith’s information
+into the database.
+NOTE: All columns must be filled in. Do not hard code values that can be looked up in the
+SalesPeople table. (If you use the number “4” in your answer, then you have done something
+wrong)
+INSERT INTO Salespeople (SalesID, FirstName, LastName, Base, Supervisor)
+VALUES (5, 'John', 'Smith', 300, 4); //I don't understand this one, I'm sorry
+
+
+Q15. John Smith has been awarded a $100 dollar raise. Update the database to reflect this raise
+for John Smith.
+UPDATE Salespeople
+SET Base = Base + 100
+WHERE FirstName = 'John' AND LastName = 'Smith';
+
+
+Q16. John Smith is no longer working out for the company. Please delete John Smith’s
+information from the database.
+DELETE FROM Salespeople
+WHERE FirstName = 'John' AND LastName = 'Smith';
+
+Extra Credit (Each is worth 1 point extra credit)
+
+EC1. The following query will become too inefficient as we add more titles and tracks. Make this
+query more efficient by using a subquery in the FROM clause:
+SELECT Tr.Titleid, TrackTitle, Lengthseconds
+FROM Tracks Tr INNER JOIN Titles Ti
+ON Tr.TitleID = Ti.TitleID
+WHERE Tr.TitleID = 4;
+
+SELECT Tr.TitleID, Tr.TrackTitle, Tr.LengthSeconds
+FROM Tracks Tr
+INNER JOIN (SELECT TitleID FROM Titles WHERE TitleID = 4) Ti
+ON Tr.TitleID = Ti.TitleID;
+
+
+EC2. For TitleID 1, report the TitleID, track number, track title, lengthseconds, average
+lengthseconds for all tracks from TitleID 1, and the difference between the lengthseconds and
+the average lengthseconds.
+SELECT Tr.TitleID, Tr.TrackNum, Tr.TrackTitle, Tr.LengthSeconds, AvgLength.AvgLengthSeconds,
+       Tr.LengthSeconds - AvgLength.AvgLengthSeconds AS Difference
+FROM Tracks Tr
+JOIN (SELECT AVG(LengthSeconds) AS AvgLengthSeconds 
+      FROM Tracks 
+      WHERE TitleID = 1) AS AvgLength
+ON Tr.TitleID = 1;
+
+
+

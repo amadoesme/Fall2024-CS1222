@@ -1,0 +1,35 @@
+1. A primary key is a column that unique defines a row in a table. Salesid is an example of one.
+2. Concat will concat any number of values together. Concat_ws will use the first arguement to separate the rest of the values and put them all together.
+3. Joining tables together allows you to gather information from related tables. Titles and tracks are related because they have a one to many relation ship (one album can have many songs)
+4. Durability ensures that when my information is saved to a database, it will stay saved the next time I log on.
+
+5. This query lists all members and their sales people in alphabetical order
+6. Lists all members full names
+7. Lists only salespeople being paid less than 300 and shows the studio that they work with
+8. Only displays artists that have recorded a title
+
+9. select firstname, lastname, region from Members where email is null;
+10. select firstname, lastname, region from Members where email is null and (homephone like '%2' or homephone like '%3');
+11. select count(*), avg(lengthseconds) from tracks where left(tracktitle, 1) = 's%';
+	OR
+	select count(*), avg(lengthseconds) from tracks where tracktitle like 's%';
+12. select count(*), region, gender from members group by region, gender order by region;
+13. select firstname, lastname, artistname from Members M inner join XrefArtistsMembers X on(M.memberid = X.memberid) inner join Artists A on(A.artistid = X.artistid) where artistname = 'Highlander';
+14. select tracktitle from tracks where length(tracktitle) = (select max(length(tracktitle)) from Tracks);
+15. insert into members
+select 37, 'Jane', 'Doe', '123 Fake', ' ', 'CA', 99999, 'USA', '555-555-5555', '555-555-5555', 'Jane.Doe@Email.com', 'F', '1995-11-01', 2;
+16. select 'Canada' as Total, count(*) from members where country = 'Canada'
+	union
+	select 'USA', count(*) from members where country = 'USA'
+	union
+	select 'Total', count(*) from members;
+
+
+
+
+
+
+
+
+
+
