@@ -1,0 +1,142 @@
+Name: Esmeralda Amado
+
+Part 1: Short Answers 
+
+Q1. What is a primary key used for? Can you give me an example of a primary key in
+restaurants collection?
+ANSWER: It's a column that uniquely defines a table row. An example is _id.
+
+Q2. What does JSON stand for? Can you give an example of a JSON object.
+ANSWER: JSON stands for JavaScript Object Detection. An example is { "name": "Randy",
+                                                                     "gpa": 3.9,
+                                                                     "students": [
+                                                                                  "Alice",
+                                                                                  "Bob",
+                                                                                  "Eve"
+                                                                                 ],
+                                                                      "skills": {
+                                                                                  "mysql": "good",
+                                                                                  "nosql": "good",
+                                                                                  "javascript": "very good"
+                                                                                }
+                                                                   }
+
+
+Q3. What is the purpose of a “projection” in a find query for MongoDB?
+ANSWER: Limit the amount of fields to be returned by a find() query.
+
+
+Part 2: I will give you MongoDB queries and you must describe what they do.
+
+Q4. db.users.find(
+	{$or: [{firstname: "Randy"}, {lastname: “Moss”}]}
+		 )
+ANSWER: It gets all documents of people whose first name is Randy or last name is Moss.
+
+Q5. db.cars.find(
+		{make: "Honda"},
+		{year: 1}
+		)
+ANSWER: It finds all the Honda cars and returns only their year
+
+Q6. db.cars.find(
+		{make: "Honda"},
+		{year: 1, _id: 0}
+		)
+ANSWER: It finds all the Honda cards and returns only their year, excluding the _id field.
+
+Q7. db.restaurants.updateMany(
+				{cuisine: "Japanese"},
+				{$set: {
+					address: {
+						street: "A new street name"
+						 }
+                                        }
+                                 }
+                             )
+ANSWER: It updates all restaurants serving Japanese food and then updates the street field of their address to a new one.
+
+
+Part 3: Use the Restaurants collection to create a query that satisfies the question.
+
+Q8. Count how many restaurants have a cuisine of “Bakery”
+ANSWER: db.restaurants.aggregate([
+  				  { $match: { cuisine: "Bakery" } },
+                                  { $count: "bakeryCount" }
+                                ])
+
+Q9. Update the address field for ALL restaurants that have a cuisine of “Bakery” to be the
+following:
+           "address": {
+           "building": "10000",
+           "coord": [
+                     -50,
+                      2
+                    ],
+          "street": "Other street",
+          "zipcode": "99999"
+          }
+ANSWER: db.restaurants.updateMany (
+                                    { cuisine: "Bakery" },
+                                    { $set: {
+                                              "address": {
+                                                          "building": "10000",
+                                                          "coord": [
+                                                                    -50,
+                                                                     2
+                                                                    ],
+                                               "street": "Other street",
+                                               "zipcode": "99999"
+                                                          } 
+                                             }
+                                    }
+                                  )
+
+Q10. Insert a new restaurant with the following information. The name of the restaurant is “Cal
+State LA Cuisine”. It has a cuisine of “Italian”, an address of 5151 State University Dr, Los
+Angeles, CA 90032 in building 1000. Its restaurant id will be 12345678. It will have no “coord”,
+“borough”, or “grades”.
+ANSWER: db.restaurants.insertOne(
+                                  { name: "Cal State LA Cuisine",
+                                    cuisine: "Italian",
+                                    address: {
+                                               street: "5151 State University Dr",
+                                               city: "Los Angeles",
+                                               state: "CA",
+                                               zipcode: "90032",
+                                               building: "1000"
+                                             },
+                                    restaurant_id: "12345678"
+                                  }
+                                );
+
+
+Q11. Delete the above restaurant that you just inserted into the database for question 10.
+ANSWER: db.restaurants.deleteOne(
+                                 { restaurant_id: 12345678 }
+                                );
+
+
+Extra Credit (1 point)
+Answer question 8 by only using the “aggregate” function. (If you already answered question 8
+with an “aggregate” function, then you will get one regular point and 1 extra credit point)
+ANSWER: I answered question 8 with the aggregate function
+
+
+Extra Credit (1 point)
+Create a text index for the name, cuisine, and borough fields in the restaurants collection. The
+name field should have a weight of 20, cuisine should have a weight of 10, and borough should
+have a weight of 2.
+ANSWER: db.restaurants.createIndex(
+                                   { name: "text",
+                                     cuisine: "text",
+                                     borough: "text"
+                                   },
+                                   { weights: {
+                                                name: 20,
+                                                cuisine: 10,
+                                                borough: 2
+                                               }
+                                   }
+                                 );
+
