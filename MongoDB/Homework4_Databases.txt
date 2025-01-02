@@ -1,0 +1,83 @@
+Name: Esmeralda Amado
+
+1. What are the total number of documents in the pitching collection
+ANSWER: db.pitching.countDocuments()
+
+2. Count the number of documents that are in the year of 1872
+ANSWER: db.pitching.aggregate([
+  				{ $match: 
+                                         { year: 1872 } 
+                                },
+  				{ $count: "total" }
+                             ])
+
+3. Count the number of documents that are between the year of 1870 to 1880
+ANSWER: db.pitching.aggregate([
+  				{ $match: 
+                                         { year: 
+                                                { $gte: 1870, 
+                                                  $lte: 1880 
+                                                 } 
+                                         } 
+                                },
+  				{ $count: "total" }
+			     ])
+
+4. What is the highest ipouts value in the pitching collection? (Hint, you will need to group by the entire collection. You will also need to filter out players that don't have an ipout)
+ANSWER: db.pitching.aggregate([
+  				{ $match: 
+                                         { ipouts: 
+                                                   { $exists: true 
+                                                   } 
+                                         } 
+                                },
+  				{ $group: 
+                                         { _id: null, 
+                                          maxIpouts: 
+                                                    { $max: "$ipouts" 
+                                                    } 
+                                         } 
+                                }
+                             ])
+
+5. Find the average year in the whole pitching collection
+ANSWER: db.pitching.aggregate([
+  				{ $group: 
+                                         { _id: null, 
+                                           avgYear: 
+                                                   { $avg: "$year" 
+                                                   } 
+                                         } 
+                                }
+                             ])
+
+6. Group the players by year and return the average ipouts per year
+ANSWER: db.pitching.aggregate([
+  				{ $group: 
+                                         { _id: "$year", 
+                                          avgIpouts: 
+                                                    { $avg: "$ipouts" 
+                                                    } 
+                                         } 
+                                 }
+			     ])
+
+7. Group by year and player_id and then order by the number of players in each grouping
+ANSWER: db.pitching.aggregate([
+  				{ $group: 
+                                         { _id: 
+                                               { year: "$year", 
+                                                 player_id: "$player_id" 
+                                               }, 
+                                          count: 
+                                                { $sum: 1 
+                                                } 
+                                         } 
+                                },
+  				{ $sort: 
+                                        { "count": -1 
+                                        } 
+                                }
+                             ])
+
+
